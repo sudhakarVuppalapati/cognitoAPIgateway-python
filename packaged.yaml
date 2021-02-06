@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'lambda-authorizer-basic-auth-cognito
+
+  SAM Template for lambda-authorizer-basic-auth-cognito
+
+  '
+Globals:
+  Function:
+    Timeout: 3
+Parameters:
+  CognitoUserPoolId:
+    Description: Previously created Cognito User Pool Id
+    Type: String
+  CognitoClientId:
+    Description: Previously created Cognito Client Id
+    Type: String
+Resources:
+  LambdaAuthorizerBasicAuthCognitoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://lnrtests3/2f948a23a8375e63f62e4cea741a377d
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Tracing: Active
+      Policies:
+      - Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - cognito-idp:AdminInitiateAuth
+          Resource:
+            Fn::Join:
+            - ''
+            - - 'arn:'
+              - Ref: AWS::Partition
+              - ':cognito-idp:'
+              - Ref: AWS::Region
+              - ':'
+              - Ref: AWS::AccountId
+              - :userpool/
+              - Ref: CognitoUserPoolId
+      Environment:
+        Variables:
+          USER_POOL_ID:
+            Ref: CognitoUserPoolId
+          CLIENT_ID:
+            Ref: CognitoClientId
+          LOG_LEVEL: INFO
+Outputs:
+  LambdaAuthorizerBasicAuthCognitoFunction:
+    Description: Lambda Authorizer Basic Auth Function ARN
+    Value:
+      Fn::GetAtt:
+      - LambdaAuthorizerBasicAuthCognitoFunction
+      - Arn
