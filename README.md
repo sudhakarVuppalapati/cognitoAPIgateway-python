@@ -8,7 +8,8 @@ This is a sample template for lambda-authorizer-basic-auth-cognito - Below is a 
 ├── lambda_authorizer_basic_auth_cognito                 <-- Source code for a lambda function
 │   ├── __init__.py
 │   └── app.py                  <-- Lambda function code
-├── requirements.txt            <-- Python dependencies
+│   └── Build                  <-- folder
+│        └── requirements.txt  <-- Python dependencies
 ├── template.yaml               <-- SAM template
 └── tests                       <-- Unit tests
     └── unit
